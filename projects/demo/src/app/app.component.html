@@ -1,0 +1,96 @@
+<div class="container">
+  <div class="mx-auto mt-3">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="card">
+        <div class="card-body px-4">
+          <h5 class="card-title">Profile</h5>
+
+          <div class="mb-3">
+            <label for="firstName" class="form-label">First Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="firstName"
+              formControlName="firstName"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="lastName" class="form-label">Last Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="lastName"
+              formControlName="lastName"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              formControlName="email"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="phone" class="form-label">Phone</label>
+            <input
+              type="text"
+              class="form-control"
+              id="phone"
+              formControlName="phoneNumber"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-4" formGroupName="address">
+        <div class="card-body">
+          <h5 class="card-title">Address</h5>
+
+          <div class="mb-3">
+            <label for="street" class="form-label">Street address</label>
+            <input
+              type="text"
+              class="form-control"
+              id="street"
+              formControlName="street"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="city" class="form-label">City</label>
+            <input
+              type="text"
+              class="form-control"
+              id="city"
+              formControlName="city"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="state" class="form-label">State</label>
+            <input
+              type="text"
+              class="form-control"
+              id="state"
+              formControlName="state"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="zipcode" class="form-label">Zipcode</label>
+            <input
+              type="text"
+              class="form-control"
+              id="zipcode"
+              formControlName="zipcode"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-4 d-flex justify-content-end">
+        <button class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
