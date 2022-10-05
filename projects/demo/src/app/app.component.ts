@@ -25,6 +25,18 @@ export class AppComponent {
       state: ['', [FormValidators.required('State is required')]],
       zipcode: ['', [FormValidators.required('Zipcode is required')]],
     }),
+    employeeHistory: this.formBuilder.group({
+      title: ['', [FormValidators.required('Title is required')]],
+      company: ['', [FormValidators.required('Company is required')]],
+      location: this.formBuilder.group({
+        city: ['', [FormValidators.required('City is required')]],
+        country: ['', [FormValidators.required('Country is required')]],
+      }),
+      period: this.formBuilder.group({
+        from: [],
+        to: [],
+      }),
+    }),
   });
 
   constructor(private formBuilder: FormBuilder) {

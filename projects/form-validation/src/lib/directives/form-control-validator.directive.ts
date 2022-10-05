@@ -1,7 +1,7 @@
 import { AfterViewInit, ApplicationRef, ComponentRef, createComponent, Directive, ElementRef, EmbeddedViewRef, Inject, Injector, Input, OnDestroy, Optional, Renderer2, SkipSelf, TemplateRef, Type, ViewContainerRef } from '@angular/core';
 import { FormGroupDirective, NgControl } from '@angular/forms';
 import { map, Observable, Subscription } from 'rxjs';
-import { distinctUntilChanged, filter } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 
 import { FormEvents } from '../models/form-events';
 import {
@@ -75,6 +75,7 @@ export class FormControlValidatorDirective implements AfterViewInit, OnDestroy {
   private invalidFeedbackComponentRef: ComponentRef<BaseInvalidFeedbackComponent> | EmbeddedViewRef<any> | null = null;
   private subscriptions = new Subscription();
   private autoDetectUIFramework: SupportedFrameworks = SupportedFrameworks.None;
+  private cached = '';
 
   constructor(
     private readonly applicationRef: ApplicationRef,
@@ -95,19 +96,20 @@ export class FormControlValidatorDirective implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     this.detectFramework();
+    let cached: string;
 
     const events$ = (this.parent.events$ as Observable<FormEvents>);
 
     this.subscriptions.add(events$.pipe(
       filter(() => !this.skipValidation),
-      map((event) => {
-        console.log('form validation' , event, this.control.name)
+      map(() => {
         return this.formatErrors(this.control.errors as ValidationErrors);
-      }),
-      distinctUntilChanged((previousError, currentError) =>
-        JSON.stringify(previousError) === JSON.stringify(currentError)
-      )
+      })
     ).subscribe(errors => {
+      if (cached === JSON.stringify(errors)) {
+        return;
+      }
+
       this.updateFeedback(errors);
     }));
   }
@@ -176,6 +178,9 @@ export class FormControlValidatorDirective implements AfterViewInit, OnDestroy {
       if (this.invalidFeedbackComponentRef instanceof ComponentRef && this.invalidFeedbackComponentRef.instance) {
         this.invalidFeedbackComponentRef.instance.errors = errors;
       }
+      this.cached = JSON.stringify(errors);
+    } else {
+      this.cached = '';
     }
   }
 
@@ -191,13 +196,16 @@ export class FormControlValidatorDirective implements AfterViewInit, OnDestroy {
 
       this.renderer.removeClass(this.elementRef.nativeElement, 'is-valid');
       this.renderer.addClass(this.elementRef.nativeElement, 'is-invalid');
+
+      this.cached = JSON.stringify(errors);
     } else {
+      this.cached = '';
       this.renderer.removeClass(this.elementRef.nativeElement, 'is-valid');
       this.renderer.removeClass(this.elementRef.nativeElement, 'is-invalid');
-    }
 
-    if (errors.length === 0 && this.control.valid) {
-      this.renderer.addClass(this.elementRef.nativeElement, 'is-valid');
+      if (errors.length === 0 && this.control.valid && (this.control.dirty || this.formGroupDirective.submitted)) {
+        this.renderer.addClass(this.elementRef.nativeElement, 'is-valid');
+      }
     }
   }
 
@@ -233,6 +241,10 @@ export class FormControlValidatorDirective implements AfterViewInit, OnDestroy {
         this.applicationRef.attachView(this.invalidFeedbackComponentRef.hostView);
         this.invalidFeedbackComponentRef.instance.errors = errors;
       }
+
+      this.cached = JSON.stringify(errors);
+    } else {
+      this.cached = '';
     }
   }
 }

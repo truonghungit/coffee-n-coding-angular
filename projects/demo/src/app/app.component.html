@@ -88,6 +88,81 @@
         </div>
       </div>
 
+
+  <div class="card mt-4" formGroupName="employeeHistory">
+    <div class="card-body">
+      <h5 class="card-title">Employment history</h5>
+
+      <div class="mb-3">
+        <label for="company" class="form-label">Company</label>
+        <input
+          type="text"
+          class="form-control"
+          id="company"
+          placeholder="Company Name"
+          formControlName="company"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Ex: Frontend Developer"
+          id="title"
+          formControlName="title"
+        />
+      </div>
+      <div class="mb-3" formGroupName="location">
+        <label for="city" class="form-label">Location</label>
+        <div class="row">
+          <div class="col-sm-6">
+            <input
+              type="text"
+              class="form-control"
+              id="city"
+              placeholder="City"
+              formControlName="city"
+            />
+          </div>
+          <div class="col-sm-6">
+            <input
+              type="text"
+              class="form-control"
+              id="country"
+              placeholder="Country"
+              formControlName="country"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3" formGroupName="period">
+        <label for="from" class="form-label">Period</label>
+        <div class="row">
+          <div class="col-sm-6">
+            <input
+              type="text"
+              class="form-control"
+              id="from"
+              placeholder="From Year"
+              formControlName="from"
+            />
+          </div>
+          <div class="col-sm-6">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="To Year"
+              formControlName="to"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
       <div class="mt-4 d-flex justify-content-end">
         <button class="btn btn-primary">Submit</button>
       </div>
