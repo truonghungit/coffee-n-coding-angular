@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "build:form-validation": "ng build --project form-validation --configuration production",
+    "publish": "npm publish --access public"
   },
   "private": true,
   "dependencies": {
