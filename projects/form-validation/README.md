@@ -5,16 +5,12 @@
 - 🔥 Automatic form validation
 - 💪 Built on top of [Angular Reactive Forms](https://angular.io/guide/reactive-forms)
 ## Docs
-- 
-[Stackblitz](./docs/getting-started.md)
-
+- [Getting Started](./docs/getting-started.md)
 - [Live Demo](https://stackblitz.com/edit/angular-ivy-gpgk6x?file=src/app/app.module.ts)
 
 ## Why use @eztek/ngx-validation
 
-Declarative validation error messages for reactive forms.
-
-Typically you'd do something like this:
+Declarative validation error messages for reactive forms. Typically you'd do something like this:
 
 #### Without **@eztek/ngx-validation**
 ```
