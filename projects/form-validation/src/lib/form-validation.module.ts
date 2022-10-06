@@ -13,6 +13,7 @@ import {
 
 import { FORM_VALIDATION_CONFIGURATION } from './form-validation-token';
 import { FormValidationConfig, SupportedFrameworks } from './models';
+import { defaultErrorMessages } from './constants/default-error-messages';
 
 export const defaultFormValidationConfig: FormValidationConfig = {
   invalidClasses: '',
@@ -20,6 +21,7 @@ export const defaultFormValidationConfig: FormValidationConfig = {
   targetSelector: '',
   validateOnInit: false,
   errorMessageClasses: 'invalid-feedback-messages',
+  defaultErrorMessages: defaultErrorMessages,
   framework: SupportedFrameworks.None
 }
 

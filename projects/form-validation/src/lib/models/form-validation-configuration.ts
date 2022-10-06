@@ -9,6 +9,7 @@ export const enum SupportedFrameworks {
 
 export interface FormValidationConfig {
   invalidFeedbackTemplate?: Type<BaseInvalidFeedbackComponent>;
+  defaultErrorMessages: {[key: string]: string};
   invalidClasses: string;
   skipValidation: boolean;
   targetSelector: string;

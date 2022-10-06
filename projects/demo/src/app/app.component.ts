@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { FormValidators } from 'form-validation';
 
 @Component({
@@ -9,15 +9,9 @@ import { FormValidators } from 'form-validation';
 })
 export class AppComponent {
   form = this.formBuilder.group({
-    firstName: ['', [FormValidators.required('First Name is required')]],
+    firstName: ['', [Validators.required]],
     lastName: ['', [FormValidators.required('Last Name is required')]],
-    email: [
-      '',
-      [
-        FormValidators.required('Email is required'),
-        FormValidators.email('Email is invalid'),
-      ],
-    ],
+    email: ['', [Validators.required, Validators.email,]],
     phoneNumber: [''],
     address: this.formBuilder.group({
       street: [''],

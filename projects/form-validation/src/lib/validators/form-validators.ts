@@ -135,39 +135,4 @@ export class FormValidators {
         : { equal: { message } };
     };
   };
-
-  static matchWith(controlNamesToCompare: Array<string>, message: string): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-
-      const parent = control.parent;
-
-      if (!(parent instanceof FormGroup)) {
-        return null;
-      }
-
-      const controlsToCompare = controlNamesToCompare
-        .map(name => parent.controls[name])
-        .filter(control => control);
-
-      if (!control || !controlsToCompare || controlsToCompare.length === 0) {
-        return null;
-      }
-
-      const controlValuesToCompare = controlsToCompare.map(control => control.value);
-
-      if (isEmptyInputValue(control.value) || controlValuesToCompare.some(val => isEmptyInputValue(val))) {
-        return null; // don't validate empty values to allow optional controls
-      }
-
-      if (controlValuesToCompare.every((val) => val === control.value)) {
-        return null;
-      }
-
-      return {
-        matchWith: {
-          message
-        }
-      };
-    }
-  }
 }

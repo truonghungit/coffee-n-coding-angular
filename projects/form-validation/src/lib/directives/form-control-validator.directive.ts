@@ -1,5 +1,5 @@
 import { AfterViewInit, ApplicationRef, ComponentRef, createComponent, Directive, ElementRef, EmbeddedViewRef, Inject, Injector, Input, OnDestroy, Optional, Renderer2, SkipSelf, TemplateRef, Type, ViewContainerRef } from '@angular/core';
-import { FormGroupDirective, NgControl } from '@angular/forms';
+import { FormGroupDirective, NgControl, ValidationErrors as NgValidationErrors } from '@angular/forms';
 import { map, Observable, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -75,7 +75,6 @@ export class FormControlValidatorDirective implements AfterViewInit, OnDestroy {
   private invalidFeedbackComponentRef: ComponentRef<BaseInvalidFeedbackComponent> | EmbeddedViewRef<any> | null = null;
   private subscriptions = new Subscription();
   private autoDetectUIFramework: SupportedFrameworks = SupportedFrameworks.None;
-  private cached = '';
 
   constructor(
     private readonly applicationRef: ApplicationRef,
@@ -96,19 +95,15 @@ export class FormControlValidatorDirective implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     this.detectFramework();
-    let cached: string;
 
     const events$ = (this.parent.events$ as Observable<FormEvents>);
 
     this.subscriptions.add(events$.pipe(
       filter(() => !this.skipValidation),
       map(() => {
-        return this.formatErrors(this.control.errors as ValidationErrors);
+        return this.formatErrors(this.control.errors);
       })
     ).subscribe(errors => {
-      if (cached === JSON.stringify(errors)) {
-        return;
-      }
 
       this.updateFeedback(errors);
     }));
@@ -148,11 +143,16 @@ export class FormControlValidatorDirective implements AfterViewInit, OnDestroy {
     }
   }
 
-  private formatErrors(errors: ValidationErrors): Array<ValidationErrorMessage> {
+  private formatErrors(errors: ValidationErrors | null): Array<ValidationErrorMessage> {
+    if (!errors) {
+      return [];
+    }
+
     return Object.keys(errors || {}).map(key => {
+      const message = errors[key].message || this.config.defaultErrorMessages[key];
       return {
         key,
-        message: errors[key].message || '',
+        message,
         meta: errors[key]
       }
     })
@@ -178,9 +178,6 @@ export class FormControlValidatorDirective implements AfterViewInit, OnDestroy {
       if (this.invalidFeedbackComponentRef instanceof ComponentRef && this.invalidFeedbackComponentRef.instance) {
         this.invalidFeedbackComponentRef.instance.errors = errors;
       }
-      this.cached = JSON.stringify(errors);
-    } else {
-      this.cached = '';
     }
   }
 
@@ -197,9 +194,7 @@ export class FormControlValidatorDirective implements AfterViewInit, OnDestroy {
       this.renderer.removeClass(this.elementRef.nativeElement, 'is-valid');
       this.renderer.addClass(this.elementRef.nativeElement, 'is-invalid');
 
-      this.cached = JSON.stringify(errors);
     } else {
-      this.cached = '';
       this.renderer.removeClass(this.elementRef.nativeElement, 'is-valid');
       this.renderer.removeClass(this.elementRef.nativeElement, 'is-invalid');
 
@@ -242,9 +237,6 @@ export class FormControlValidatorDirective implements AfterViewInit, OnDestroy {
         this.invalidFeedbackComponentRef.instance.errors = errors;
       }
 
-      this.cached = JSON.stringify(errors);
-    } else {
-      this.cached = '';
     }
   }
 }
